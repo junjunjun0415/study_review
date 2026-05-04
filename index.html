@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Counter & Timer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+
+  <main class="card">
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-tab="counter" role="tab">Counter</button>
+      <button class="tab" data-tab="timer" role="tab">Timer</button>
+      <span class="tab-indicator"></span>
+    </nav>
+
+    <!-- Counter panel -->
+    <section class="panel active" id="panel-counter">
+      <header class="card-header">
+        <span class="dot"></span>
+        <h1>Counter</h1>
+      </header>
+
+      <div class="display">
+        <div class="count" id="count">0</div>
+        <div class="display-label">current value</div>
+      </div>
+
+      <div class="buttons">
+        <button id="decrement" class="btn btn-circle" aria-label="減らす">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+        <button id="reset" class="btn btn-reset" aria-label="リセット">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        </button>
+        <button id="increment" class="btn btn-circle btn-primary" aria-label="増やす">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+
+      <div class="step">
+        <span class="step-label">Step</span>
+        <div class="step-control">
+          <button id="step-down" class="step-btn" aria-label="ステップを減らす">−</button>
+          <input type="number" id="step" value="1" min="1">
+          <button id="step-up" class="step-btn" aria-label="ステップを増やす">+</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timer panel -->
+    <section class="panel" id="panel-timer">
+      <header class="card-header">
+        <span class="dot dot-timer"></span>
+        <h1 id="timer-title">Timer</h1>
+      </header>
+
+      <div class="display">
+        <div class="time-display" id="time-display">
+          <input type="number" class="time-input" id="time-min" value="5" min="0" max="99" aria-label="分">
+          <span class="time-sep">:</span>
+          <input type="number" class="time-input" id="time-sec" value="00" min="0" max="59" aria-label="秒">
+        </div>
+        <div class="display-label" id="timer-label">set duration</div>
+      </div>
+
+      <div class="presets" id="presets">
+        <button class="preset" data-min="1">1m</button>
+        <button class="preset" data-min="3">3m</button>
+        <button class="preset" data-min="5">5m</button>
+        <button class="preset" data-min="10">10m</button>
+        <button class="preset" data-min="25">25m</button>
+      </div>
+
+      <div class="buttons">
+        <button id="timer-reset" class="btn btn-reset" aria-label="リセット">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+        </button>
+        <button id="timer-toggle" class="btn btn-primary btn-pill" aria-label="開始">
+          <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+          <span id="timer-toggle-label">Start</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
