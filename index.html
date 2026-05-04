@@ -18,6 +18,7 @@
     <nav class="tabs" role="tablist">
       <button class="tab active" data-tab="counter" role="tab">Counter</button>
       <button class="tab" data-tab="timer" role="tab">Timer</button>
+      <button class="tab" data-tab="todo" role="tab">Todo</button>
       <span class="tab-indicator"></span>
     </nav>
 
@@ -89,6 +90,37 @@
           <span id="timer-toggle-label">Start</span>
         </button>
       </div>
+    </section>
+
+    <!-- Todo panel -->
+    <section class="panel" id="panel-todo">
+      <header class="card-header">
+        <span class="dot dot-todo"></span>
+        <h1>Todo</h1>
+        <span class="todo-count" id="todo-count">0</span>
+      </header>
+
+      <form class="todo-form" id="todo-form" autocomplete="off">
+        <input type="text" id="todo-input" class="todo-input" placeholder="新しいタスクを追加..." maxlength="200">
+        <button type="submit" class="btn btn-add" aria-label="追加">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </form>
+
+      <div class="filters" id="todo-filters">
+        <button class="filter active" data-filter="all">All</button>
+        <button class="filter" data-filter="active">Active</button>
+        <button class="filter" data-filter="done">Done</button>
+      </div>
+
+      <ul class="todo-list" id="todo-list"></ul>
+
+      <div class="todo-empty" id="todo-empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        <p>タスクがありません</p>
+      </div>
+
+      <button class="btn-clear" id="todo-clear" hidden>完了したタスクを削除</button>
     </section>
   </main>
 
