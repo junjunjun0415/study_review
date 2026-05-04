@@ -247,3 +247,127 @@ presetButtons.forEach(btn => {
 // Initialize timer display
 timeMinEl.value = pad(parseInt(timeMinEl.value, 10) || 5);
 timeSecEl.value = pad(parseInt(timeSecEl.value, 10) || 0);
+
+/* ========== Todo ========== */
+const TODO_KEY = 'todo_items';
+const todoForm = document.getElementById('todo-form');
+const todoInput = document.getElementById('todo-input');
+const todoList = document.getElementById('todo-list');
+const todoEmpty = document.getElementById('todo-empty');
+const todoCount = document.getElementById('todo-count');
+const todoClear = document.getElementById('todo-clear');
+const filterButtons = document.querySelectorAll('.filter');
+
+let todos = loadTodos();
+let currentFilter = 'all';
+
+function loadTodos() {
+  try {
+    const raw = localStorage.getItem(TODO_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveTodos() {
+  try {
+    localStorage.setItem(TODO_KEY, JSON.stringify(todos));
+  } catch { /* noop */ }
+}
+
+function visibleTodos() {
+  if (currentFilter === 'active') return todos.filter(t => !t.done);
+  if (currentFilter === 'done') return todos.filter(t => t.done);
+  return todos;
+}
+
+function renderTodos() {
+  const items = visibleTodos();
+  todoList.innerHTML = '';
+  items.forEach(todo => {
+    const li = document.createElement('li');
+    li.className = 'todo-item' + (todo.done ? ' done' : '');
+    li.dataset.id = todo.id;
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'todo-checkbox';
+    checkbox.checked = todo.done;
+    checkbox.addEventListener('change', () => toggleTodo(todo.id));
+
+    const text = document.createElement('span');
+    text.className = 'todo-text';
+    text.textContent = todo.text;
+
+    const del = document.createElement('button');
+    del.type = 'button';
+    del.className = 'todo-delete';
+    del.setAttribute('aria-label', '削除');
+    del.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+    del.addEventListener('click', () => deleteTodo(todo.id));
+
+    li.append(checkbox, text, del);
+    todoList.appendChild(li);
+  });
+
+  const remaining = todos.filter(t => !t.done).length;
+  const hasDone = todos.some(t => t.done);
+  todoCount.textContent = remaining;
+  todoEmpty.classList.toggle('visible', items.length === 0);
+  todoClear.hidden = !hasDone;
+}
+
+function addTodo(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return;
+  todos.unshift({
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    text: trimmed,
+    done: false,
+    createdAt: Date.now()
+  });
+  saveTodos();
+  renderTodos();
+}
+
+function toggleTodo(id) {
+  const todo = todos.find(t => t.id === id);
+  if (!todo) return;
+  todo.done = !todo.done;
+  saveTodos();
+  renderTodos();
+}
+
+function deleteTodo(id) {
+  todos = todos.filter(t => t.id !== id);
+  saveTodos();
+  renderTodos();
+}
+
+function clearDone() {
+  todos = todos.filter(t => !t.done);
+  saveTodos();
+  renderTodos();
+}
+
+todoForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  addTodo(todoInput.value);
+  todoInput.value = '';
+  todoInput.focus();
+});
+
+todoClear.addEventListener('click', clearDone);
+
+filterButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentFilter = btn.dataset.filter;
+    filterButtons.forEach(b => b.classList.toggle('active', b === btn));
+    renderTodos();
+  });
+});
+
+renderTodos();
